@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.lv.greendao3.adapter.EditUserListener;
 import com.lv.greendao3.adapter.UserAdapter;
 import com.lv.greendao3.data.DbManager;
 import com.lv.greendao3.model.User;
@@ -28,8 +30,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, EditUserListener {
 
+    private Toolbar toolbarComm;
     private RecyclerView recyclerViewUser;
     private RelativeLayout layoutDeleteBottom;
     private FloatingActionButton floatButtonAdd;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     isEditMode = false;
                     layoutDeleteBottom.setVisibility(View.GONE);
                 } else {
+                    userAdapter.unSelectAll();
                     isEditMode = true;
                     layoutDeleteBottom.setVisibility(View.VISIBLE);
                 }
@@ -91,11 +95,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initUI() {
+        toolbarComm = (Toolbar) findViewById(R.id.toolbar_comm);
         recyclerViewUser = (RecyclerView) findViewById(R.id.recycler_view_user);
         layoutDeleteBottom = (RelativeLayout) findViewById(R.id.layout_delete_bottom);
         floatButtonAdd = (FloatingActionButton) findViewById(R.id.float_button_add);
         btnDelete = (Button) findViewById(R.id.btn_delete);
 
+        toolbarComm.setTitle(getResources().getString(R.string.app_name));
+        setSupportActionBar(toolbarComm);
         layoutDeleteBottom.setVisibility(View.GONE);
         setRecyclerViewUser();
         setFloatButtonAdd();
@@ -106,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setRecyclerViewUser() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewUser.setLayoutManager(linearLayoutManager);
-        userAdapter = new UserAdapter(this, isEditMode);
+        userAdapter = new UserAdapter(this, isEditMode, this);
         recyclerViewUser.setAdapter(userAdapter);
     }
 
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.float_button_add://新增
-                showAddDialog();
+                showDialog(null);
                 break;
             case R.id.btn_delete://删除
                 if (userAdapter.getSelectUsers() != null && userAdapter.getSelectUsers().size() > 0) {
@@ -142,16 +149,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userAdapter.setUsers(users);
     }
 
-    private void showAddDialog() {
+    private void showDialog(final User user) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("新增");
-        builder.setView(getView());
+        if (user == null) {
+            builder.setTitle("新增");
+        } else {
+            builder.setTitle("修改");
+        }
+        builder.setView(getView(user));
         builder.setCancelable(true);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (validateSignIn()) {
-                    DbManager.addUser(userName, userSexy);
+                    if (user == null) {//说明是新增
+                        DbManager.addUser(userName, userSexy);
+                    } else {
+                        user.setName(userName);
+                        user.setSexy(userSexy);
+                        DbManager.updateUserById(user);
+                    }
                     queryUsers();
                 }
             }
@@ -170,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton radioButtonMan;
     private RadioButton radioButtonWoman;
 
-    private View getView() {
+    private View getView(User user) {
 
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_user_layout, null);
         editSignName = (TextInputEditText) contentView.findViewById(R.id.edit_text_name);
@@ -178,6 +195,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radioButtonMan = (RadioButton) contentView.findViewById(R.id.radio_button_man);
         radioButtonWoman = (RadioButton) contentView.findViewById(R.id.radio_button_woman);
 
+        if (user != null) {
+            editSignName.setText(user.getName());
+            if (user.getSexy() == User.MAN) {
+                radioButtonMan.setChecked(true);
+            } else {
+                radioButtonWoman.setChecked(true);
+            }
+        }
         return contentView;
     }
 
@@ -204,5 +229,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userSexy = User.WOMAN;
         }
         return result;
+    }
+
+    @Override
+    public void editUser(User user) {
+        showDialog(user);
     }
 }

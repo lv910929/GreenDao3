@@ -1,6 +1,8 @@
 package com.lv.greendao3.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lv.greendao3.ContactActivity;
 import com.lv.greendao3.R;
 import com.lv.greendao3.model.User;
+import com.lv.greendao3.utils.ActivityUtil;
 import com.lv.greendao3.widget.SmoothCheckBox;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
 /**
  * Created by Lv on 2017/2/27.
@@ -29,9 +35,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Set<User> selectUsers;
 
-    public UserAdapter(Context context, boolean isEditMode) {
+    private EditUserListener editUserListener;
+
+    public UserAdapter(Context context, boolean isEditMode, EditUserListener editUserListener) {
         this.context = context;
         this.isEditMode = isEditMode;
+        this.editUserListener = editUserListener;
         users = new ArrayList<>();
         selectUsers = new HashSet<>();
     }
@@ -50,6 +59,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         return selectUsers;
     }
 
+    //全不选
+    public void unSelectAll() {
+        for (int i = 0; i < users.size(); i++) {
+            users.get(i).setSelect(false);
+        }
+        selectUsers.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -58,28 +76,36 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final User user = users.get(position);
+        String firstChar = String.valueOf(user.getName().charAt(0));
+        holder.avatarImageUser.setTextAndColor(firstChar, AvatarImageView.COLORS[position % 6]);
         if (user.getSexy() == User.MAN) {
-            holder.imageUser.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_man));
             holder.textSexyFlag.setText("男生");
-            holder.textSexyFlag.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            holder.textSexyFlag.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         } else {
-            holder.imageUser.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_women));
             holder.textSexyFlag.setText("女生");
-            holder.textSexyFlag.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            holder.textSexyFlag.setTextColor(context.getResources().getColor(R.color.red600));
         }
         if (isEditMode) {
             holder.checkboxUserItem.setVisibility(View.VISIBLE);
+            holder.btnEditUser.setVisibility(View.VISIBLE);
         } else {
             holder.checkboxUserItem.setVisibility(View.GONE);
+            holder.btnEditUser.setVisibility(View.GONE);
         }
         holder.textUserName.setText(user.getName());
-        if (user.isSelect()){
+        if (user.isSelect()) {
             holder.checkboxUserItem.setChecked(true);
-        }else {
+        } else {
             holder.checkboxUserItem.setChecked(false);
         }
+        holder.btnEditUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editUserListener.editUser(user);
+            }
+        });
         holder.checkboxUserItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +120,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 }
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", user);
+                bundle.putInt("colorId", position % 6);
+                ActivityUtil.startActivity((Activity) context, ContactActivity.class, bundle);
+            }
+        });
     }
 
     @Override
@@ -104,16 +139,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
 
         SmoothCheckBox checkboxUserItem;
-        ImageView imageUser;
+        AvatarImageView avatarImageUser;
         TextView textUserName;
         TextView textSexyFlag;
+        ImageView btnEditUser;
 
         public ViewHolder(View itemView) {
             super(itemView);
             checkboxUserItem = (SmoothCheckBox) itemView.findViewById(R.id.checkbox_user_item);
-            imageUser = (ImageView) itemView.findViewById(R.id.image_user);
+            avatarImageUser = (AvatarImageView) itemView.findViewById(R.id.avatar_image_user);
             textUserName = (TextView) itemView.findViewById(R.id.text_user_name);
             textSexyFlag = (TextView) itemView.findViewById(R.id.text_sexy_flag);
+            btnEditUser = (ImageView) itemView.findViewById(R.id.btn_edit_user);
+
         }
     }
 }

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#3F51B5</color>
 
     <color name="white">#ffffff</color>
     <color name="grey50">#fafafa</color>
@@ -16,4 +16,8 @@
     <color name="grey800">#424242</color>
     <color name="grey900">#212121</color>
     <color name="white_gary">#80ffffff</color>
+
+    <color name="red600">#e53935</color>
+
+    <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
 </resources>

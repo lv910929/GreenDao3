@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@drawable/selector_white"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -26,12 +26,14 @@
         android:layout_height="60dp"
         android:padding="5dp">
 
-        <ImageView
-            android:id="@+id/image_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/icon_man" />
+        <cn.carbs.android.avatarimageview.library.AvatarImageView
+            android:id="@+id/avatar_image_user"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            app:aiv_BoarderWidth="2dp"
+            app:aiv_ShowBoarder="false"
+            app:aiv_TextSizeRatio="0.4" />
 
     </RelativeLayout>
 
@@ -42,30 +44,45 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/text_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="张三"
-                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_sexy_flag"
+                <TextView
+                    android:id="@+id/text_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="张三"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_sexy_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="男"
+                    android:textColor="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btn_edit_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="男"
-                android:textColor="@color/colorPrimaryDark" />
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/icon_edit" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
