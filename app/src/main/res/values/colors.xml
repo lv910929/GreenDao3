@@ -19,5 +19,9 @@
 
     <color name="red600">#e53935</color>
 
+    <color name="title_orange">#F6AC2B</color>
+    <color name="title_green">#6DC3B3</color>
+    <color name="title_blue">#5E97BE</color>
+
     <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
 </resources>

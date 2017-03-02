@@ -61,6 +61,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.lv.greendao3.widget.MyRecyclerView
+                android:id="@+id/recycler_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
