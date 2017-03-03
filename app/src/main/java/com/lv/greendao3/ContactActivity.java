@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.lv.greendao3.adapter.EditPhoneListener;
 import com.lv.greendao3.adapter.PhoneAdapter;
 import com.lv.greendao3.base.SwipeActivity;
 import com.lv.greendao3.data.DbManager;
@@ -28,7 +29,7 @@ import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
-public class ContactActivity extends SwipeActivity implements View.OnClickListener {
+public class ContactActivity extends SwipeActivity implements View.OnClickListener, EditPhoneListener {
 
     private CollapsingToolbarLayout collapsingToolbar;
     private Toolbar toolbar;
@@ -86,7 +87,7 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
     private void setRecyclerPhone() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerPhone.setLayoutManager(linearLayoutManager);
-        phoneAdapter = new PhoneAdapter(this);
+        phoneAdapter = new PhoneAdapter(this, this);
         phoneAdapter.setPhones(phones);
         recyclerPhone.setAdapter(phoneAdapter);
     }
@@ -198,6 +199,30 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
             phoneType = Phone.CTCC;
         }
         return result;
+    }
+
+    @Override
+    public void editPhone(Phone phone) {
+        showDialog(phone);
+    }
+
+    @Override
+    public void deletePhone(final Phone phone) {
+        new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("您确定要删除手机号码 " + phone.getPhoneNumber() + "?")
+                .setCancelable(true)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        List<Phone> phoneList = new ArrayList<>();
+                        phoneList.add(phone);
+                        DbManager.deletePhoneList(phoneList);
+                        queryPhones();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 
 }

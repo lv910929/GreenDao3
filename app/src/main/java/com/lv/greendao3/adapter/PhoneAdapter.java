@@ -2,6 +2,8 @@ package com.lv.greendao3.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +31,11 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
     private Context context;
     private List<Phone> phones;
 
-    public PhoneAdapter(Context context) {
+    private EditPhoneListener editPhoneListener;
+
+    public PhoneAdapter(Context context, EditPhoneListener editPhoneListener) {
         this.context = context;
+        this.editPhoneListener = editPhoneListener;
         phones = new ArrayList<>();
     }
 
@@ -56,22 +61,25 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
         holder.textPhoneNumber.setText(phoneStringBuilder.toString());
         holder.textPhoneType.setText(PHONE_TYPE_LIST[phone.getPhoneType() - 1]);
         holder.textPhoneType.setTextColor(context.getResources().getColor(PHONE_TYPE_COLORS[phone.getPhoneType() - 1]));
+        //发送短信
         holder.btnSendSms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityUtil.doSendSMSTo((Activity) context, phone.getPhoneNumber(), "");
             }
         });
+        //拨打电话
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityUtil.intentPhoneCall(context, phone.getPhoneNumber());
             }
         });
+        //多功能操作
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                MyToast.showShortToast("修改电话：" + phone.getPhoneNumber());
+                showActionDialog(phone);
                 return true;
             }
         });
@@ -94,5 +102,42 @@ public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> 
             textPhoneType = (TextView) itemView.findViewById(R.id.text_phone_type);
             btnSendSms = (ImageView) itemView.findViewById(R.id.btn_send_sms);
         }
+    }
+
+    private void showActionDialog(final Phone phone) {
+        new AlertDialog.Builder(context)
+                .setTitle(phone.getPhoneNumber())
+                .setCancelable(true)
+                .setView(getView(phone))
+                .show();
+    }
+
+    private RecyclerView recyclerAction;
+
+    private View getView(final Phone phone) {
+        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_action_layout, null);
+        recyclerAction = (RecyclerView) contentView.findViewById(R.id.recycler_action);
+        ActionAdapter actionAdapter = new ActionAdapter(context);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+        recyclerAction.setLayoutManager(gridLayoutManager);
+        recyclerAction.setAdapter(actionAdapter);
+        actionAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                switch (position) {
+                    case 0:
+                        editPhoneListener.deletePhone(phone);
+                        break;
+                    case 1:
+                        editPhoneListener.editPhone(phone);
+                        break;
+                    case 2:
+                        ActivityUtil.copyTextToClip(context, phone.getPhoneNumber());
+                        MyToast.showShortToast("已复制到剪切板");
+                        break;
+                }
+            }
+        });
+        return contentView;
     }
 }

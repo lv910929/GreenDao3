@@ -1,6 +1,8 @@
 package com.lv.greendao3.utils;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -73,5 +75,13 @@ public class ActivityUtil {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    //复制文本到剪切板
+    public static void copyTextToClip(Context context, String text) {
+        ClipboardManager clipboardManager = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        // Creates a new text clip to put on the
+        ClipData clip = ClipData.newPlainText("content", text);
+        clipboardManager.setPrimaryClip(clip);
     }
 }
