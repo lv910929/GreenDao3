@@ -2,6 +2,7 @@ package com.lv.greendao3;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -10,16 +11,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.lv.greendao3.adapter.EditPhoneListener;
+import com.kennyc.bottomsheet.BottomSheet;
+import com.kennyc.bottomsheet.BottomSheetListener;
+import com.lv.greendao3.adapter.ItemLongClickListener;
 import com.lv.greendao3.adapter.PhoneAdapter;
 import com.lv.greendao3.base.SwipeActivity;
 import com.lv.greendao3.data.DbManager;
 import com.lv.greendao3.model.Phone;
 import com.lv.greendao3.model.User;
+import com.lv.greendao3.utils.ActivityUtil;
 import com.lv.greendao3.utils.MyToast;
 import com.lv.greendao3.utils.ValidateUtil;
 import com.lv.greendao3.widget.MyRecyclerView;
@@ -29,7 +34,7 @@ import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
-public class ContactActivity extends SwipeActivity implements View.OnClickListener, EditPhoneListener {
+public class ContactActivity extends SwipeActivity implements View.OnClickListener, ItemLongClickListener, BottomSheetListener {
 
     private CollapsingToolbarLayout collapsingToolbar;
     private Toolbar toolbar;
@@ -41,6 +46,7 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
     private User user;
     private int colorId;
     private List<Phone> phones;
+    private Phone selectPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,7 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
         colorId = bundle.getInt("colorId", 0);
         phones = new ArrayList<>();
         phones.addAll(DbManager.queryPhonesByUserId(user.getId()));
+        selectPhone = null;
     }
 
     private void initUI() {
@@ -201,13 +208,11 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
         return result;
     }
 
-    @Override
-    public void editPhone(Phone phone) {
+    private void editPhone(Phone phone) {
         showDialog(phone);
     }
 
-    @Override
-    public void deletePhone(final Phone phone) {
+    private void deletePhone(final Phone phone) {
         new AlertDialog.Builder(this)
                 .setTitle("提示")
                 .setMessage("您确定要删除手机号码 " + phone.getPhoneNumber() + "?")
@@ -225,4 +230,40 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
                 .show();
     }
 
+    @Override
+    public void onItemLongClick(Phone phone) {
+        selectPhone = phone;
+        new BottomSheet.Builder(this)
+                .setSheet(R.menu.menu_edit)
+                .setTitle(selectPhone.getPhoneNumber())
+                .grid()
+                .setListener(this)
+                .show();
+    }
+
+    @Override
+    public void onSheetShown(@NonNull BottomSheet bottomSheet) {
+
+    }
+
+    @Override
+    public void onSheetItemSelected(@NonNull BottomSheet bottomSheet, MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.menu_delete:
+                deletePhone(selectPhone);
+                break;
+            case R.id.menu_modify:
+                editPhone(selectPhone);
+                break;
+            case R.id.menu_copy:
+                ActivityUtil.copyTextToClip(ContactActivity.this, selectPhone.getPhoneNumber());
+                MyToast.showShortToast("已复制到剪切板");
+                break;
+        }
+    }
+
+    @Override
+    public void onSheetDismissed(@NonNull BottomSheet bottomSheet, @DismissEvent int i) {
+
+    }
 }

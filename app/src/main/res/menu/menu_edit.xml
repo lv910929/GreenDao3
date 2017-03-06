@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_delete"
+        android:icon="@drawable/ic_action_delete"
+        android:title="删除" />
+
+    <item
+        android:id="@+id/menu_modify"
+        android:icon="@drawable/ic_action_modify"
+        android:title="修改" />
+
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="@drawable/ic_action_clipboard"
+        android:title="复制" />
+
+
+</menu>

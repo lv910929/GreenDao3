@@ -52,5 +52,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //高斯模糊
     compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //对话框
+    compile 'com.github.Kennyc1012:BottomSheet:2.3.1'
     testCompile 'junit:junit:4.12'
 }
