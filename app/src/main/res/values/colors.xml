@@ -24,4 +24,7 @@
     <color name="title_blue">#5E97BE</color>
 
     <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
+
+    <color name="side_bar_text">#4A4A4A</color>
+    <color name="shadow_bg">#66000000</color>
 </resources>

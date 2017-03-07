@@ -30,6 +30,8 @@ public class User implements Serializable {
     private String name;
     @Property(nameInDb = "SEXY")
     private int sexy;
+    @Property(nameInDb = "SORT_LETTER")
+    private String sortLetters;
     //@Transient：表明这个字段不会被写入数据库，只是作为一个普通的java类字段，用来临时存储数据的，不会被持久化
     @Transient
     private boolean isSelect;
@@ -53,6 +55,14 @@ public class User implements Serializable {
 
     @Keep
     public User() {
+    }
+
+    @Generated(hash = 1745691125)
+    public User(Long id, String name, int sexy, String sortLetters) {
+        this.id = id;
+        this.name = name;
+        this.sexy = sexy;
+        this.sortLetters = sortLetters;
     }
 
     public Long getId() {
@@ -156,5 +166,13 @@ public class User implements Serializable {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getUserDao() : null;
+    }
+
+    public String getSortLetters() {
+        return this.sortLetters;
+    }
+
+    public void setSortLetters(String sortLetters) {
+        this.sortLetters = sortLetters;
     }
 }
