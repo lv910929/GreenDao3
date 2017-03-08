@@ -24,6 +24,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".ContactActivity" />
+
+        <!-- ####### 友盟 ####### -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="58be638f677baa264200042d" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="a0e15694b1aa4c20a82c6e01cdb14555" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng" />
     </application>
 
 </manifest>
