@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lv.greendao3.ContactActivity;
+import com.lv.greendao3.ContactDetailActivity;
 import com.lv.greendao3.R;
 import com.lv.greendao3.model.User;
 import com.lv.greendao3.utils.ActivityUtil;
@@ -126,7 +126,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("user", user);
                 bundle.putInt("colorId", position % 6);
-                ActivityUtil.startActivity((Activity) context, ContactActivity.class, bundle);
+                ActivityUtil.startActivity((Activity) context, ContactDetailActivity.class, bundle);
             }
         });
     }

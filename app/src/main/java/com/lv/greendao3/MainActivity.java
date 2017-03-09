@@ -1,29 +1,28 @@
 package com.lv.greendao3;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.lv.greendao3.adapter.EditUserListener;
 import com.lv.greendao3.adapter.UserAdapter;
 import com.lv.greendao3.data.DbManager;
+import com.lv.greendao3.data.MainEvent;
 import com.lv.greendao3.model.User;
+import com.lv.greendao3.utils.DialogUtils;
 import com.lv.greendao3.utils.MyToast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         initData();
         initUI();
         queryUsers();
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_action, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.float_button_add://新增
-                showDialog(null);
+                DialogUtils.showContactDialog(MainActivity.this, null);
                 break;
             case R.id.btn_delete://删除
                 if (userAdapter.getSelectUsers() != null && userAdapter.getSelectUsers().size() > 0) {
@@ -149,90 +149,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userAdapter.setUsers(users);
     }
 
-    private void showDialog(final User user) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        if (user == null) {
-            builder.setTitle("新增");
-        } else {
-            builder.setTitle("修改");
-        }
-        builder.setView(getView(user));
-        builder.setCancelable(true);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (validateSignIn()) {
-                    if (user == null) {//说明是新增
-                        DbManager.addUser(userName, userSexy);
-                    } else {
-                        user.setName(userName);
-                        user.setSexy(userSexy);
-                        DbManager.updateUserById(user);
-                    }
-                    queryUsers();
-                }
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+    @Override
+    public void editUser(User user) {
+        DialogUtils.showContactDialog(MainActivity.this, user);
     }
 
-    private TextInputEditText editSignName;
-    private RadioGroup radioGroupSexy;
-    private RadioButton radioButtonMan;
-    private RadioButton radioButtonWoman;
-
-    private View getView(User user) {
-
-        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_user_layout, null);
-        editSignName = (TextInputEditText) contentView.findViewById(R.id.edit_text_name);
-        radioGroupSexy = (RadioGroup) contentView.findViewById(R.id.radio_group_sexy);
-        radioButtonMan = (RadioButton) contentView.findViewById(R.id.radio_button_man);
-        radioButtonWoman = (RadioButton) contentView.findViewById(R.id.radio_button_woman);
-
-        if (user != null) {
-            editSignName.setText(user.getName());
-            if (user.getSexy() == User.MAN) {
-                radioButtonMan.setChecked(true);
-            } else {
-                radioButtonWoman.setChecked(true);
-            }
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onEvent(MainEvent event) {
+        switch (event.getWhat()) {
+            case 0://更新通讯录列表
+                queryUsers();
+                break;
         }
-        return contentView;
-    }
-
-    //报名姓名
-    private String userName;
-    //性别
-    private int userSexy;
-
-    private boolean validateSignIn() {
-        boolean result = true;
-        userName = editSignName.getText().toString().trim();
-        StringBuilder builder = new StringBuilder();
-
-        if (TextUtils.isEmpty(userName)) {
-            builder.append("姓名不能为空\n");
-        }
-        if (!TextUtils.isEmpty(builder)) {
-            result = false;
-            MyToast.showShortToast(builder.substring(0, builder.length() - 1));
-        }
-        if (radioGroupSexy.getCheckedRadioButtonId() == R.id.radio_button_man) {
-            userSexy = User.MAN;
-        } else {
-            userSexy = User.WOMAN;
-        }
-        return result;
     }
 
     @Override
-    public void editUser(User user) {
-        showDialog(user);
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

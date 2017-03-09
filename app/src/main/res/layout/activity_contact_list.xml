@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lv.greendao3.ContactListActivity">
+
+    <include layout="@layout/toolbar_comm" />
+
+    <me.yokeyword.indexablerv.IndexableLayout
+        android:id="@+id/index_layout_contact"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey100"
+        app:indexBar_selectedTextColor="@color/red600"
+        app:indexBar_textColor="@color/grey600"
+        app:indexBar_textSize="14sp"
+        app:indexBar_textSpace="4dp" />
+
+</LinearLayout>

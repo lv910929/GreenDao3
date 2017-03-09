@@ -8,9 +8,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.lv.greendao3.data.DbManager;
-import com.lv.greendao3.utils.CharacterParser;
 import com.lv.greendao3.utils.MyToast;
-import com.lv.greendao3.utils.PinyinComparator;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
@@ -35,15 +33,10 @@ public class MyApp extends Application {
         return INSTANCE;
     }
 
-    public static CharacterParser characterParser;
-    public static PinyinComparator pinyinComparator;
-
     @Override
     public void onCreate() {
         super.onCreate();
         INSTANCE = this;
-        characterParser = CharacterParser.getInstance();
-        pinyinComparator = new PinyinComparator();
         DbManager.initDatabase(this);
         setUmengPush();
     }

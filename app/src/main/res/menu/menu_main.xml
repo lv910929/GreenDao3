@@ -5,9 +5,15 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/nav_edit"
-        android:orderInCategory="80"
-        android:title="编辑"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/menu_notification"
+        android:title="通知"
+        app:actionLayout="@layout/menu_item_badge"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_add"
+        android:orderInCategory="100"
+        android:title="新增联系人"
+        app:showAsAction="never" />
 
 </menu>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey100"
+    android:gravity="center_vertical"
+    android:padding="5dp">
+
+    <cn.carbs.android.avatarimageview.library.AvatarImageView
+        android:id="@+id/avatar_image_title"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="10dp"
+        app:aiv_BoarderWidth="2dp"
+        app:aiv_ShowBoarder="false"
+        app:aiv_TextSizeRatio="0.4" />
+
+</RelativeLayout>

@@ -34,7 +34,7 @@ import java.util.List;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 
-public class ContactActivity extends SwipeActivity implements View.OnClickListener, ItemLongClickListener, BottomSheetListener {
+public class ContactDetailActivity extends SwipeActivity implements View.OnClickListener, ItemLongClickListener, BottomSheetListener {
 
     private CollapsingToolbarLayout collapsingToolbar;
     private Toolbar toolbar;
@@ -256,7 +256,7 @@ public class ContactActivity extends SwipeActivity implements View.OnClickListen
                 editPhone(selectPhone);
                 break;
             case R.id.menu_copy:
-                ActivityUtil.copyTextToClip(ContactActivity.this, selectPhone.getPhoneNumber());
+                ActivityUtil.copyTextToClip(ContactDetailActivity.this, selectPhone.getPhoneNumber());
                 MyToast.showShortToast("已复制到剪切板");
                 break;
         }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey100"
     android:fitsSystemWindows="true"
-    tools:context="com.lv.greendao3.ContactActivity">
+    tools:context="com.lv.greendao3.ContactDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

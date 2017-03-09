@@ -12,11 +12,13 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.io.Serializable;
 import java.util.List;
 
+import me.yokeyword.indexablerv.IndexableEntity;
+
 /**
  * Created by Lv on 2017/2/27.
  */
 @Entity
-public class User implements Serializable {
+public class User implements Serializable ,IndexableEntity {
 
     private static final long serialVersionUID = 7526472295622776147L;  // unique id
 
@@ -30,8 +32,8 @@ public class User implements Serializable {
     private String name;
     @Property(nameInDb = "SEXY")
     private int sexy;
-    @Property(nameInDb = "SORT_LETTER")
-    private String sortLetters;
+    @Transient
+    private String pinyin;
     //@Transient：表明这个字段不会被写入数据库，只是作为一个普通的java类字段，用来临时存储数据的，不会被持久化
     @Transient
     private boolean isSelect;
@@ -55,14 +57,6 @@ public class User implements Serializable {
 
     @Keep
     public User() {
-    }
-
-    @Generated(hash = 1745691125)
-    public User(Long id, String name, int sexy, String sortLetters) {
-        this.id = id;
-        this.name = name;
-        this.sexy = sexy;
-        this.sortLetters = sortLetters;
     }
 
     public Long getId() {
@@ -168,11 +162,26 @@ public class User implements Serializable {
         myDao = daoSession != null ? daoSession.getUserDao() : null;
     }
 
-    public String getSortLetters() {
-        return this.sortLetters;
+    @Override
+    public String getFieldIndexBy() {
+        return name;
     }
 
-    public void setSortLetters(String sortLetters) {
-        this.sortLetters = sortLetters;
+    @Override
+    public void setFieldIndexBy(String indexField) {
+        this.name = indexField;
+    }
+
+    @Override
+    public void setFieldPinyinIndexBy(String pinyin) {
+        this.pinyin = pinyin;
+    }
+
+    public String getPinyin() {
+        return this.pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
     }
 }

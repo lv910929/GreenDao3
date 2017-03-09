@@ -2,7 +2,6 @@ package com.lv.greendao3.data;
 
 import android.content.Context;
 
-import com.lv.greendao3.MyApp;
 import com.lv.greendao3.model.DaoMaster;
 import com.lv.greendao3.model.DaoSession;
 import com.lv.greendao3.model.Phone;
@@ -32,13 +31,6 @@ public class DbManager {
 
     public static void addUser(String name, int sexy) {
         User user = new User(null, name, sexy);
-        String pinyin = MyApp.characterParser.getSelling(name);
-        String sortString = pinyin.substring(0, 1).toUpperCase();
-        if (sortString.matches("[A-Z]")) {
-            user.setSortLetters(sortString.toUpperCase());
-        } else {
-            user.setSortLetters("#");
-        }
         getUserDao().insert(user);
     }
 
@@ -65,18 +57,19 @@ public class DbManager {
     }
 
     /**
+     * 删除单个联系人
+     * @param user
+     */
+    public static void deleteUser(User user) {
+        getUserDao().delete(user);
+    }
+
+    /**
      * 修改用户信息
      *
      * @param newUser
      */
     public static void updateUserById(User newUser) {
-        String pinyin = MyApp.characterParser.getSelling(newUser.getName());
-        String sortString = pinyin.substring(0, 1).toUpperCase();
-        if (sortString.matches("[A-Z]")) {
-            newUser.setSortLetters(sortString.toUpperCase());
-        } else {
-            newUser.setSortLetters("#");
-        }
         User oldUser = getUserDao().queryBuilder().where(UserDao.Properties.Id.eq(newUser.getId())).build().unique();
         if (oldUser == null) {
             MyToast.showShortToast("用户不存在");
