@@ -4,25 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey100"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.lv.greendao3.MainActivity">
+    tools:context="com.lv.greendao3.MessagesActivity">
 
     <include layout="@layout/toolbar_comm" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/grey100">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_user"
+            android:id="@+id/recycler_view_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/layout_delete_bottom"
             android:scrollbars="vertical" />
-
-        <include layout="@layout/layout_add_button" />
 
     </RelativeLayout>
 

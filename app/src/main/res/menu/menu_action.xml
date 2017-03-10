@@ -2,12 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MainActivity">
+    tools:context=".MessagesActivity">
 
     <item
         android:id="@+id/nav_edit"
         android:orderInCategory="80"
         android:title="编辑"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_clean"
+        android:orderInCategory="100"
+        android:title="清空所有"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_read"
+        android:orderInCategory="100"
+        android:title="全部已读"
+        app:showAsAction="never" />
 
 </menu>

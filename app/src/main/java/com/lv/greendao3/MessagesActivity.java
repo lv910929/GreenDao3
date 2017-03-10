@@ -1,8 +1,6 @@
 package com.lv.greendao3;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,9 +12,11 @@ import android.widget.RelativeLayout;
 
 import com.lv.greendao3.adapter.EditUserListener;
 import com.lv.greendao3.adapter.UserAdapter;
+import com.lv.greendao3.base.SwipeActivity;
 import com.lv.greendao3.data.DbManager;
 import com.lv.greendao3.data.MainEvent;
 import com.lv.greendao3.model.User;
+import com.lv.greendao3.utils.ActivityUtil;
 import com.lv.greendao3.utils.DialogUtils;
 import com.lv.greendao3.utils.MyToast;
 
@@ -29,12 +29,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, EditUserListener {
+public class MessagesActivity extends SwipeActivity implements View.OnClickListener, EditUserListener {
 
     private Toolbar toolbarComm;
-    private RecyclerView recyclerViewUser;
     private RelativeLayout layoutDeleteBottom;
-    private FloatingActionButton floatButtonAdd;
+    private RecyclerView recyclerViewMessage;
     private Button btnDelete;
 
     private UserAdapter userAdapter;
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_messages);
         EventBus.getDefault().register(this);
         initData();
         initUI();
@@ -80,9 +79,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     isEditMode = true;
                     layoutDeleteBottom.setVisibility(View.VISIBLE);
                 }
-                setFloatButtonAdd();
                 userAdapter.setEditMode(isEditMode);
                 invalidateOptionsMenu();
+                break;
+            case R.id.menu_clean:
+                ActivityUtil.notifyUpdateMenu(0);
+                break;
+            case R.id.menu_read:
+                ActivityUtil.notifyUpdateMenu(0);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -96,40 +100,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initUI() {
         toolbarComm = (Toolbar) findViewById(R.id.toolbar_comm);
-        recyclerViewUser = (RecyclerView) findViewById(R.id.recycler_view_user);
+        recyclerViewMessage = (RecyclerView) findViewById(R.id.recycler_view_message);
         layoutDeleteBottom = (RelativeLayout) findViewById(R.id.layout_delete_bottom);
-        floatButtonAdd = (FloatingActionButton) findViewById(R.id.float_button_add);
         btnDelete = (Button) findViewById(R.id.btn_delete);
 
-        toolbarComm.setTitle(getResources().getString(R.string.app_name));
-        setSupportActionBar(toolbarComm);
+        setToolbarComm();
+        setRecyclerView();
         layoutDeleteBottom.setVisibility(View.GONE);
-        setRecyclerViewUser();
-        setFloatButtonAdd();
-        floatButtonAdd.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
     }
 
-    private void setRecyclerViewUser() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerViewUser.setLayoutManager(linearLayoutManager);
-        userAdapter = new UserAdapter(this, isEditMode, this);
-        recyclerViewUser.setAdapter(userAdapter);
+    private void setToolbarComm() {
+        toolbarComm.setTitle("通知中心");
+        setSupportActionBar(toolbarComm);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbarComm.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
-    private void setFloatButtonAdd() {
-        if (isEditMode) {
-            floatButtonAdd.setVisibility(View.GONE);
-        } else {
-            floatButtonAdd.setVisibility(View.VISIBLE);
-        }
+    private void setRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerViewMessage.setLayoutManager(linearLayoutManager);
+        userAdapter = new UserAdapter(this, isEditMode, this);
+        recyclerViewMessage.setAdapter(userAdapter);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.float_button_add://新增
-                DialogUtils.showContactDialog(MainActivity.this, null);
+                DialogUtils.showContactDialog(MessagesActivity.this, null);
                 break;
             case R.id.btn_delete://删除
                 if (userAdapter.getSelectUsers() != null && userAdapter.getSelectUsers().size() > 0) {
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void editUser(User user) {
-        DialogUtils.showContactDialog(MainActivity.this, user);
+        DialogUtils.showContactDialog(MessagesActivity.this, user);
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)

@@ -109,8 +109,17 @@ public class ActivityUtil {
         return isRunning;
     }
 
-    //通知更新通讯录
+    /**
+     * 通知更新通讯录
+     */
     public static void notifyUpdateContacts() {
         EventBus.getDefault().post(new MainEvent(0, null));
+    }
+
+    /**
+     * 通知更新消息角标
+     */
+    public static void notifyUpdateMenu(Integer notifyCountNum) {
+        EventBus.getDefault().post(new MainEvent(1, notifyCountNum));
     }
 }

@@ -4,10 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.lv.greendao3.ContactListActivity">
 
     <include layout="@layout/toolbar_comm" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey100"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="@color/grey700"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        app:queryHint="请输入关键字" />
 
     <me.yokeyword.indexablerv.IndexableLayout
         android:id="@+id/index_layout_contact"
