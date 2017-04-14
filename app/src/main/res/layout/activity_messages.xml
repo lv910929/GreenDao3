@@ -10,21 +10,11 @@
 
     <include layout="@layout/toolbar_comm" />
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_message"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/grey100">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/layout_delete_bottom"
-            android:scrollbars="vertical" />
-
-    </RelativeLayout>
-
-    <include layout="@layout/layout_delete_bottom" />
+        android:layout_height="match_parent"
+        android:background="@color/grey100"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

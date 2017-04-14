@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.lv.greendao3.model.DaoMaster;
 import com.lv.greendao3.model.DaoSession;
+import com.lv.greendao3.model.Message;
+import com.lv.greendao3.model.MessageDao;
 import com.lv.greendao3.model.Phone;
 import com.lv.greendao3.model.PhoneDao;
 import com.lv.greendao3.model.User;
@@ -58,6 +60,7 @@ public class DbManager {
 
     /**
      * 删除单个联系人
+     *
      * @param user
      */
     public static void deleteUser(User user) {
@@ -111,4 +114,35 @@ public class DbManager {
         getPhoneDao().deleteInTx(phoneList);
     }
 
+    public static MessageDao getMessageDao() {
+        return daoSession.getMessageDao();
+    }
+
+    /**
+     * 查询所有的消息
+     *
+     * @return
+     */
+    public static List<Message> queryMessages() {
+        return getMessageDao().queryBuilder().orderAsc(MessageDao.Properties.PushTime).list();
+    }
+
+    /**
+     * 全部已读
+     */
+    public static void updateMessageState() {
+        List<Message> messages = getMessageDao().queryBuilder().where(MessageDao.Properties.ReadState.eq(Message.UNREAD_STATE)).list();
+        for (int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+            message.setReadState(Message.READ_STATE);
+            getMessageDao().update(message);
+        }
+    }
+
+    /**
+     * 清空消息
+     */
+    public static void cleanMessages() {
+        getMessageDao().deleteAll();
+    }
 }

@@ -1,4 +1,4 @@
-package com.lv.greendao3.utils;
+package com.lv.mysdk.utils;
 
 
 public class DoubleClickUtil {

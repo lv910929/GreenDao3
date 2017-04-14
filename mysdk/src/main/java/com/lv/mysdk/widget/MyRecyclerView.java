@@ -1,12 +1,14 @@
-package com.lv.greendao3.widget;
+package com.lv.mysdk.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
+
 
 /**
- * Created by hasee on 2017/2/22 0022.
+ * 解决和scrollview滑动冲突的RecyclerView
  */
 
 public class MyRecyclerView extends RecyclerView {
@@ -25,8 +27,8 @@ public class MyRecyclerView extends RecyclerView {
 
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
-                MeasureSpec.AT_MOST);
+        int expandSpec = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
+                View.MeasureSpec.AT_MOST);
         super.onMeasure(widthSpec, expandSpec);
     }
 

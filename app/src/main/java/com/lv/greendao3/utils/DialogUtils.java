@@ -42,7 +42,7 @@ public class DialogUtils {
                 .show();
     }
 
-    public static void showContactDialog(Context context, final User user) {
+    public static void showContactDialog(final Context context, final User user) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (user == null) {
             builder.setTitle("新增");
@@ -54,7 +54,7 @@ public class DialogUtils {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (validateSignIn()) {
+                if (validateSignIn(context)) {
                     if (user == null) {//说明是新增
                         DbManager.addUser(userName, userSexy);
                     } else {
@@ -62,7 +62,7 @@ public class DialogUtils {
                         user.setSexy(userSexy);
                         DbManager.updateUserById(user);
                     }
-                    ActivityUtil.notifyUpdateContacts();
+                    IntentUtil.notifyUpdateContacts();
                 }
             }
         });
@@ -104,7 +104,7 @@ public class DialogUtils {
     //性别
     private static int userSexy;
 
-    private static boolean validateSignIn() {
+    private static boolean validateSignIn(Context context) {
         boolean result = true;
         userName = editSignName.getText().toString().trim();
         StringBuilder builder = new StringBuilder();
@@ -114,7 +114,6 @@ public class DialogUtils {
         }
         if (!TextUtils.isEmpty(builder)) {
             result = false;
-            MyToast.showShortToast(builder.substring(0, builder.length() - 1));
         }
         if (radioGroupSexy.getCheckedRadioButtonId() == R.id.radio_button_man) {
             userSexy = User.MAN;

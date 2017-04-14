@@ -1,9 +1,13 @@
-package com.lv.greendao3.utils;
+package com.lv.mysdk.utils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+/**
+ * 校验通用类
+ */
 
 public class ValidateUtil {
 

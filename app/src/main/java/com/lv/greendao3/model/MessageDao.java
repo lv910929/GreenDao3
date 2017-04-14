@@ -26,6 +26,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
         public final static Property PushTime = new Property(3, String.class, "pushTime", false, "PUSH_TIME");
+        public final static Property ReadState = new Property(4, int.class, "readState", false, "READ_STATE");
     }
 
 
@@ -44,7 +45,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TITLE\" TEXT," + // 1: title
                 "\"CONTENT\" TEXT," + // 2: content
-                "\"PUSH_TIME\" TEXT);"); // 3: pushTime
+                "\"PUSH_TIME\" TEXT," + // 3: pushTime
+                "\"READ_STATE\" INTEGER NOT NULL );"); // 4: readState
     }
 
     /** Drops the underlying database table. */
@@ -76,6 +78,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (pushTime != null) {
             stmt.bindString(4, pushTime);
         }
+        stmt.bindLong(5, entity.getReadState());
     }
 
     @Override
@@ -101,6 +104,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         if (pushTime != null) {
             stmt.bindString(4, pushTime);
         }
+        stmt.bindLong(5, entity.getReadState());
     }
 
     @Override
@@ -114,7 +118,8 @@ public class MessageDao extends AbstractDao<Message, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // content
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // pushTime
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // pushTime
+            cursor.getInt(offset + 4) // readState
         );
         return entity;
     }
@@ -125,6 +130,7 @@ public class MessageDao extends AbstractDao<Message, Long> {
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPushTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setReadState(cursor.getInt(offset + 4));
      }
     
     @Override

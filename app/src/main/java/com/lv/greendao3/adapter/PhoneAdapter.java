@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.lv.greendao3.R;
 import com.lv.greendao3.model.Phone;
-import com.lv.greendao3.utils.ActivityUtil;
+import com.lv.mysdk.utils.ActivityUtil;
 
 import java.util.ArrayList;
 import java.util.List;

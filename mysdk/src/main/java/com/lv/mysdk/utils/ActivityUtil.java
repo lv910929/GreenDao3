@@ -1,4 +1,4 @@
-package com.lv.greendao3.utils;
+package com.lv.mysdk.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -11,9 +11,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 
-import com.lv.greendao3.data.MainEvent;
-
-import org.greenrobot.eventbus.EventBus;
+import com.lv.mysdk.R;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +26,7 @@ public class ActivityUtil {
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-        //((Activity) context).overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+        ((Activity) context).overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
     }
 
     public static void startActivity(Activity activity, Class targetActivity, Bundle bundle) {
@@ -38,7 +36,7 @@ public class ActivityUtil {
             intent.putExtras(bundle);
         }
         activity.startActivity(intent);
-        //activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
     }
 
     public static void startActivityWithFinish(Activity activity, Class targetActivity, Bundle bundle) {
@@ -49,7 +47,7 @@ public class ActivityUtil {
         }
         activity.startActivity(intent);
         activity.finish();
-        //activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
     }
 
     public static void startActivity(Activity activity, Class targetActivity, Map<String, String> map, Bundle bundle) {
@@ -62,7 +60,7 @@ public class ActivityUtil {
             intent.putExtras(bundle);
         }
         activity.startActivity(intent);
-        //activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
     }
 
     /**
@@ -109,17 +107,5 @@ public class ActivityUtil {
         return isRunning;
     }
 
-    /**
-     * 通知更新通讯录
-     */
-    public static void notifyUpdateContacts() {
-        EventBus.getDefault().post(new MainEvent(0, null));
-    }
 
-    /**
-     * 通知更新消息角标
-     */
-    public static void notifyUpdateMenu(Integer notifyCountNum) {
-        EventBus.getDefault().post(new MainEvent(1, notifyCountNum));
-    }
 }

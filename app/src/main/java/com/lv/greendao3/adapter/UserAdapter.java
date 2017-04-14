@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.lv.greendao3.ContactDetailActivity;
 import com.lv.greendao3.R;
 import com.lv.greendao3.model.User;
-import com.lv.greendao3.utils.ActivityUtil;
 import com.lv.greendao3.widget.SmoothCheckBox;
+import com.lv.mysdk.utils.ActivityUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
