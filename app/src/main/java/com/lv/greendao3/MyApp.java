@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.lv.greendao3.data.DbManager;
-import com.lv.greendao3.utils.MyToast;
+import com.lv.mysdk.utils.MyToast;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
@@ -67,7 +67,7 @@ public class MyApp extends Application {
                             //自定义消息的忽略统计
                             UTrack.getInstance(getApplicationContext()).trackMsgDismissed(msg);
                         }
-                        MyToast.showShortToast(msg.custom);
+                        MyToast.showShortToast(getApplicationContext(), msg.custom);
                     }
                 });
             }

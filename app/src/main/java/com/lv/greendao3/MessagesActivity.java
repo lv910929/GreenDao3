@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
 import com.lv.greendao3.adapter.MessageAdapter;
 import com.lv.greendao3.base.SwipeActivity;
@@ -22,7 +21,6 @@ import java.util.List;
 public class MessagesActivity extends SwipeActivity implements View.OnClickListener {
 
     private Toolbar toolbarComm;
-    private RelativeLayout layoutDeleteBottom;
     private RecyclerView recyclerViewMessage;
     private Button btnDelete;
 
@@ -63,12 +61,10 @@ public class MessagesActivity extends SwipeActivity implements View.OnClickListe
     private void initUI() {
         toolbarComm = (Toolbar) findViewById(R.id.toolbar_comm);
         recyclerViewMessage = (RecyclerView) findViewById(R.id.recycler_view_message);
-        layoutDeleteBottom = (RelativeLayout) findViewById(R.id.layout_delete_bottom);
         btnDelete = (Button) findViewById(R.id.btn_delete);
 
         setToolbarComm();
         setRecyclerView();
-        layoutDeleteBottom.setVisibility(View.GONE);
         btnDelete.setOnClickListener(this);
     }
 

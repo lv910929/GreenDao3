@@ -18,7 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
 
 import com.lv.greendao3.R;
-import com.lv.greendao3.utils.CompatUtils;
+import com.lv.mysdk.utils.CompatUtils;
 
 
 /*

@@ -24,10 +24,10 @@ import com.lv.greendao3.base.SwipeActivity;
 import com.lv.greendao3.data.DbManager;
 import com.lv.greendao3.model.Phone;
 import com.lv.greendao3.model.User;
-import com.lv.greendao3.utils.ActivityUtil;
-import com.lv.greendao3.utils.MyToast;
-import com.lv.greendao3.utils.ValidateUtil;
-import com.lv.greendao3.widget.MyRecyclerView;
+import com.lv.mysdk.utils.ActivityUtil;
+import com.lv.mysdk.utils.MyToast;
+import com.lv.mysdk.utils.ValidateUtil;
+import com.lv.mysdk.widget.MyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +196,7 @@ public class ContactDetailActivity extends SwipeActivity implements View.OnClick
         }
         if (!TextUtils.isEmpty(builder)) {
             result = false;
-            MyToast.showShortToast(builder.substring(0, builder.length() - 1));
+            MyToast.showShortToast(ContactDetailActivity.this, builder.substring(0, builder.length() - 1));
         }
         if (radioButtonCmcc.isChecked()) {
             phoneType = Phone.CMCC;
@@ -257,7 +257,7 @@ public class ContactDetailActivity extends SwipeActivity implements View.OnClick
                 break;
             case R.id.menu_copy:
                 ActivityUtil.copyTextToClip(ContactDetailActivity.this, selectPhone.getPhoneNumber());
-                MyToast.showShortToast("已复制到剪切板");
+                MyToast.showShortToast(ContactDetailActivity.this, "已复制到剪切板");
                 break;
         }
     }

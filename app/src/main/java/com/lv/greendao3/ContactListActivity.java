@@ -19,11 +19,11 @@ import com.lv.greendao3.adapter.ContactAdapter;
 import com.lv.greendao3.data.DbManager;
 import com.lv.greendao3.data.MainEvent;
 import com.lv.greendao3.model.User;
-import com.lv.greendao3.utils.ActivityUtil;
 import com.lv.greendao3.utils.DialogUtils;
-import com.lv.greendao3.utils.DoubleClickUtil;
-import com.lv.greendao3.utils.MyToast;
 import com.lv.greendao3.widget.badge.MenuItemBadge;
+import com.lv.mysdk.utils.ActivityUtil;
+import com.lv.mysdk.utils.DoubleClickUtil;
+import com.lv.mysdk.utils.MyToast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -133,7 +133,8 @@ public class ContactListActivity extends AppCompatActivity implements BottomShee
         // set Material Design OverlayView
         indexLayoutContact.setOverlayStyle_MaterialDesign(Color.RED);
         // 全字母排序。  排序规则设置为：每个字母都会进行比较排序；速度较慢
-        indexLayoutContact.setCompareMode(IndexableLayout.MODE_ALL_LETTERS);
+        indexLayoutContact.setCompareMode(IndexableLayout.MODE_FAST);
+        indexLayoutContact.showAllLetter(false);
         contactAdapter.setOnItemContentClickListener(new IndexableAdapter.OnItemContentClickListener<User>() {
             @Override
             public void onItemClick(View v, int originalPosition, int currentPosition, User entity) {
@@ -196,7 +197,7 @@ public class ContactListActivity extends AppCompatActivity implements BottomShee
                 break;
             case R.id.menu_copy:
                 ActivityUtil.copyTextToClip(ContactListActivity.this, selectUser.getName());
-                MyToast.showShortToast("已复制到剪切板");
+                MyToast.showShortToast(ContactListActivity.this, "已复制到剪切板");
                 break;
         }
     }
@@ -221,7 +222,7 @@ public class ContactListActivity extends AppCompatActivity implements BottomShee
         if (DoubleClickUtil.isDoubleClick()) {
             super.onBackPressed();
         } else {
-            MyToast.showShortToast("再按一次退出名片宝");
+            MyToast.showShortToast(ContactListActivity.this, "再按一次退出名片宝");
         }
     }
 

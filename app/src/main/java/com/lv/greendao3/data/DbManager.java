@@ -2,6 +2,7 @@ package com.lv.greendao3.data;
 
 import android.content.Context;
 
+import com.lv.greendao3.MyApp;
 import com.lv.greendao3.model.DaoMaster;
 import com.lv.greendao3.model.DaoSession;
 import com.lv.greendao3.model.Message;
@@ -10,7 +11,7 @@ import com.lv.greendao3.model.Phone;
 import com.lv.greendao3.model.PhoneDao;
 import com.lv.greendao3.model.User;
 import com.lv.greendao3.model.UserDao;
-import com.lv.greendao3.utils.MyToast;
+import com.lv.mysdk.utils.MyToast;
 
 import java.util.List;
 import java.util.Set;
@@ -75,7 +76,7 @@ public class DbManager {
     public static void updateUserById(User newUser) {
         User oldUser = getUserDao().queryBuilder().where(UserDao.Properties.Id.eq(newUser.getId())).build().unique();
         if (oldUser == null) {
-            MyToast.showShortToast("用户不存在");
+            MyToast.showShortToast(MyApp.getInstance().getApplicationContext(), "用户不存在");
         } else {
             getUserDao().update(newUser);
         }
