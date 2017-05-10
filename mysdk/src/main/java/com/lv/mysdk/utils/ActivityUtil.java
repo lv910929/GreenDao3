@@ -13,12 +13,14 @@ import android.text.TextUtils;
 
 import com.lv.mysdk.R;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 public class ActivityUtil {
 
     public static void startActivityNotInActivity(Context context, Class targetActivity, Bundle bundle) {
+        if (!DoubleClickUtil.isFastDoubleClick()) return;
         Intent intent = new Intent();
         intent.setClass(context, targetActivity);
         if (bundle != null) {
@@ -30,6 +32,7 @@ public class ActivityUtil {
     }
 
     public static void startActivity(Activity activity, Class targetActivity, Bundle bundle) {
+        if (!DoubleClickUtil.isFastDoubleClick()) return;
         Intent intent = new Intent();
         intent.setClass(activity, targetActivity);
         if (bundle != null) {
@@ -40,6 +43,7 @@ public class ActivityUtil {
     }
 
     public static void startActivityWithFinish(Activity activity, Class targetActivity, Bundle bundle) {
+        if (!DoubleClickUtil.isFastDoubleClick()) return;
         Intent intent = new Intent();
         intent.setClass(activity, targetActivity);
         if (bundle != null) {
@@ -60,6 +64,57 @@ public class ActivityUtil {
             intent.putExtras(bundle);
         }
         activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+    }
+
+    public static void startActivityForResult(Activity activity, String action, Bundle bundle, int result) {
+        if (!DoubleClickUtil.isFastDoubleClick())
+            return;
+        Intent intent = new Intent();
+        intent.setAction(action);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        activity.startActivityForResult(intent, result);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+    }
+
+    public static void startActivityForResult(Activity activity, Class targetActivity, int result) {
+        startActivityForResult(activity, targetActivity, result, null);
+    }
+
+
+    public static void startActivityForResult(Activity activity, String action, Uri uri, int result) {
+        startActivityForResult(activity, action, uri, result, null);
+    }
+
+    public static void startActivityForResult(Activity activity, String action, Uri uri, int result, Bundle bundle) {
+        if (!DoubleClickUtil.isFastDoubleClick()) return;
+        Intent intent = new Intent(action, uri);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        activity.startActivityForResult(intent, result);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+    }
+
+    public static void startActivityForResult(Activity activity, Class targetActivity, int result, Bundle bundle) {
+        if (!DoubleClickUtil.isFastDoubleClick()) return;
+        Intent intent = new Intent();
+        intent.setClass(activity, targetActivity);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        activity.startActivityForResult(intent, result);
+        activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
+    }
+
+    public static void startActivityForResult(Activity activity, Intent intent, int result, Bundle bundle) {
+        if (intent == null || !DoubleClickUtil.isFastDoubleClick())
+            return;
+        if (bundle != null)
+            intent.putExtras(bundle);
+        activity.startActivityForResult(intent, result);
         activity.overridePendingTransition(R.anim.slide_in, R.anim.slide_out_back);
     }
 
@@ -107,5 +162,57 @@ public class ActivityUtil {
         return isRunning;
     }
 
+    public static final String ImagePositionForImageShow = "PositionForImageShow";
+    public static final String ImageArrayList = "BigImageArrayList";
+    public static final String WebTitleFlag = "WebTitleFlag";
+    public static final String WebTitle = "WebTitle";
+    public static final String WebUrl = "WebUrl";
+    public static final String DayDate = "DayDate";
+
+    public static void startAppShareText(Context context, String shareTitle, String shareText) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain"); // 纯文本
+        shareIntent.putExtra(Intent.EXTRA_TITLE, shareTitle);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        //设置分享列表的标题，并且每次都显示分享列表
+        context.startActivity(Intent.createChooser(shareIntent, "分享到"));
+    }
+
+    public static void startAppShareImage(Context context, String shareTitle, String shareText, Uri uri) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.putExtra(Intent.EXTRA_TITLE, shareTitle);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        //设置分享列表的标题，并且每次都显示分享列表
+        context.startActivity(Intent.createChooser(shareIntent, "分享到"));
+    }
+
+    public void shareMsg(Context context, String activityTitle, String msgTitle, String msgText, String imgPath) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        if (imgPath == null || imgPath.equals("")) {
+            intent.setType("text/plain"); // 纯文本
+        } else {
+            File f = new File(imgPath);
+            if (f != null && f.exists() && f.isFile()) {
+                intent.setType("image/jpg");
+                Uri u = Uri.fromFile(f);
+                intent.putExtra(Intent.EXTRA_STREAM, u);
+            }
+        }
+        intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(Intent.createChooser(intent, activityTitle));
+    }
+
+    /**
+     * 跳转到网络设置界面
+     */
+    public static void redirectToNETWORK(Context context) {
+        Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+        ((Activity) context).startActivityForResult(intent, 0);
+        return;
+    }
 
 }
